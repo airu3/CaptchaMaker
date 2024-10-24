@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 20%;
+            padding: 10px;
+        }
+        .sidebar button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        .game-area {
+            width: 80%;
+            padding: 20px;
+            border-left: 1px solid #ccc;
+        }
+        .stage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .stage-grid div {
+            border: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+        }
+        .creator-info {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .creator-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #f3f3f3;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #4caf50;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+        .controls button {
+            padding: 10px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Sidebar for stage selection -->
+    <div class="sidebar">
+        <button id="playButton">Play</button>
+        <button id="createButton">Create</button>
+        <button id="myStagesButton">My Stages</button>
+        <button id="popularStagesButton">Popular Stages</button>
+        <button id="newStagesButton">New Stages</button>
+    </div>
+
+    <!-- Game area for playing the selected stage -->
+    <div class="game-area">
+        <h2 id="stage-title">Stage Title</h2>
+        <p>Select the correct image:</p>
+
+        <!-- Image grid for stage -->
+        <div class="stage-grid" id="stage-grid">
+            <div>Image 1</div>
+            <div>Image 2</div>
+            <div>Image 3</div>
+            <div>Image 4</div>
+            <div>Image 5</div>
+            <div>Image 6</div>
+            <div>Image 7</div>
+            <div>Image 8</div>
+            <div>Image 9</div>
+        </div>
+
+        <!-- Progress bar for timer -->
+        <div class="progress-bar">
+            <div class="progress-bar-fill" id="timer-bar"></div>
+        </div>
+        <p id="timer">60.0s</p>
+
+        <!-- Controls for confirming and showing results -->
+        <div class="controls">
+            <button id="confirmButton">Confirm</button>
+        </div>
+
+        <!-- Creator info and interaction buttons -->
+        <div class="creator-info">
+            <img src="creator-image.jpg" alt="Creator">
+            <span>Creator Name</span>
+        </div>
+
+        <div class="likes">
+            <button id="likeButton">👍 312</button>
+            <button id="commentButton">💬</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Timer logic
+    let timeLeft = 60;
+    const timerBar = document.getElementById('timer-bar');
+    const timerText = document.getElementById('timer');
+    const timerInterval = setInterval(() => {
+        if (timeLeft > 0) {
+            timeLeft -= 0.1;
+            timerText.textContent = timeLeft.toFixed(1) + 's';
+            timerBar.style.width = (timeLeft / 60 * 100) + '%';
+        } else {
+            clearInterval(timerInterval);
+            alert("Time's up!");
+        }
+    }, 100);
+
+    // Confirm button click
+    document.getElementById('confirmButton').addEventListener('click', function() {
+        const isCorrect = Math.random() > 0.5; // Simulate correct/incorrect answers
+        if (isCorrect) {
+            alert("Correct! Loading next stage...");
+            // Logic for loading the next random stage
+        } else {
+            alert("Incorrect! Try again.");
+            // Logic for retrying the same stage
+        }
+    });
+</script>
+
+</body>
+</html>
