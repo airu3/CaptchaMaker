@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPTURE Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            flex-direction: column;
+        }
+        .header-text {
+            font-size: 40px;
+            color: #333;
+            margin-bottom: 50px;
+        }
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+        }
+        .login-container input[type="email"], 
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4285f4;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #357ae8;
+        }
+        .create-account, .help, .terms {
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+        }
+        .create-account a, .help a, .terms a {
+            color: #4285f4;
+            text-decoration: none;
+        }
+        .create-account a:hover, .help a:hover, .terms a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-top: 20px;
+            color: #666;
+        }
+      
+    </style>
+</head>
+<body>
+    <!-- Header Text -->
+    <div class="header-text">
+        アカウント1つですべてのCAPTUREサービスを
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <img src="https://via.placeholder.com/80" alt="User Icon">
+        <h2>CAPTURE</h2>
+        <form>
+            <input type="email" name="email" placeholder="メールアドレス" required>
+            <input type="password" name="password" placeholder="パスワード" required>
+            <button type="submit">次へ</button>
+        </form>
+        <div class="create-account">
+            <a href="#">アカウントを作成</a>
+        </div>
+        <div class="footer">
+            <div class="language">
+                <a href="#">日本語</a> ▼
+            </div>
+            <div class="help-terms">
+                <a href="#">ヘルプ</a> | <a href="#">規約</a>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>
+

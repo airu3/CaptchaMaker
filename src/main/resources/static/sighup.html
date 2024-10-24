@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture アカウント作成</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .account-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 360px; /* 幅を少し広げました */
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .name-fields {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px; /* 姓と名の間に余白を追加 */
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px; /* 全体の余白を統一 */
+            margin-bottom: 15px; /* 下の余白を統一 */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box; /* 余白と入力欄のサイズが安定するように統一 */
+        }
+        .description {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 12px; /* ボタンのサイズも入力欄に合わせて統一 */
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #357ae8;
+        }
+        .footer-links {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .footer-links a {
+            color: #4285f4;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="account-container">
+    <h1>Capture アカウントの作成</h1>
+    <form action="/submit" method="POST">
+        <div class="name-fields">
+            <input type="text" id="lastName" name="lastName" placeholder="姓" required>
+            <input type="text" id="firstName" name="firstName" placeholder="名" required>
+        </div>
+
+        <input type="email" id="username" name="username" placeholder="ユーザー名 (例: example@capture.com)" required>
+        <div class="description">英数字・ピリオド(.)を使用できます。</div>
+
+        <input type="password" id="password" name="password" placeholder="パスワード" required>
+        <div class="description">英数字・記号を組み合わせて8文字以上で入力してください。</div>
+
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="パスワードの確認" required>
+
+        <div class="description">
+            <input type="checkbox" id="showPassword"> パスワードを表示する
+        </div>
+
+        <button type="submit">作成</button>
+    </form>
+
+    <div class="footer-links">
+        <a href="#">アカウントをお持ちですか？ ログイン</a>
+    </div>
+</div>
+
+<script>
+    const passwordField = document.getElementById('password');
+    const confirmPasswordField = document.getElementById('confirmPassword');
+    const showPasswordCheckbox = document.getElementById('showPassword');
+
+    showPasswordCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            passwordField.type = 'text';
+            confirmPasswordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+            confirmPasswordField.type = 'password';
+        }
+    });
+</script>
+
+</body>
+</html>
