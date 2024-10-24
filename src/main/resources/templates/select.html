@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+        }
+
+        /* サイドバーのスタイル */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            padding: 20px;
+            color: #fff;
+            position: fixed;
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            display: block;
+            margin: 20px 0;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #34495e;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #1abc9c;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* ステージリストのスタイル */
+        .stage-list {
+            height: 500px;
+            overflow-y: auto;
+            padding-right: 20px;
+            scrollbar-width: thin;
+        }
+
+        .stage-detail {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            transition: box-shadow 0.3s;
+        }
+
+        .stage-detail:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stage-image {
+            width: 80px;
+            height: 80px;
+            background-color: #bdc3c7;
+            margin-right: 20px;
+            border-radius: 5px;
+        }
+
+        .stage-info {
+            flex-grow: 1;
+        }
+
+        .stage-info h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .stage-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .stage-stats div {
+            display: flex;
+            align-items: center;
+        }
+
+        .stage-stats span {
+            margin-right: 15px;
+        }
+
+        .creator-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #bdc3c7;
+            cursor: pointer;
+        }
+
+        /* もっと見るボタン */
+        .more-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: #1abc9c;
+            text-align: center;
+            color: #fff;
+            width: 150px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .more-btn:hover {
+            background-color: #16a085;
+        }
+
+        /* スクロールバーのスタイル（カスタム） */
+        .stage-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .stage-list::-webkit-scrollbar-thumb {
+            background-color: #1abc9c;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- サイドバー -->
+    <div class="sidebar">
+        <div class="profile-pic"></div>
+        <a href="#" class="menu-item">あそぶ</a>
+        <a href="#" class="menu-item" onclick="window.location.href='create.html'">つくる</a>
+        <a href="#" class="menu-item">自分のステージ</a>
+        <a href="#" class="menu-item">人気のステージ</a>
+        <a href="#" class="menu-item">新しいステージ</a>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div class="main-content">
+        <div id="stage-list" class="stage-list">
+            <!-- JavaScriptでステージを動的に表示 -->
+        </div>
+
+        <!-- もっと見るボタン -->
+        <div class="more-btn" onclick="loadMoreStages()">もっとみる</div>
+    </div>
+
+    <script>
+        // ダミーデータ: ステージ詳細
+        const stages = [
+            { title: 'ステージ1', likes: 10, plays: 50, bestTime: '60s', clearRate: '80%', creator: 'user1' },
+            { title: 'ステージ2', likes: 5, plays: 30, bestTime: '45s', clearRate: '75%', creator: 'user2' },
+            { title: 'ステージ3', likes: 8, plays: 40, bestTime: '50s', clearRate: '70%', creator: 'user3' },
+            { title: 'ステージ4', likes: 12, plays: 60, bestTime: '55s', clearRate: '85%', creator: 'user4' },
+            { title: 'ステージ5', likes: 7, plays: 35, bestTime: '40s', clearRate: '90%', creator: 'user5' },
+            { title: 'ステージ6', likes: 15, plays: 70, bestTime: '35s', clearRate: '95%', creator: 'user6' },
+            { title: 'ステージ7', likes: 20, plays: 100, bestTime: '65s', clearRate: '50%', creator: 'user7' },
+            { title: 'ステージ8', likes: 25, plays: 120, bestTime: '75s', clearRate: '60%', creator: 'user8' },
+            { title: 'ステージ9', likes: 18, plays: 80, bestTime: '85s', clearRate: '65%', creator: 'user9' },
+            { title: 'ステージ10', likes: 30, plays: 150, bestTime: '95s', clearRate: '70%', creator: 'user10' }
+        ];
+
+        // 現在の表示数
+        let displayedCount = 0;
+        const perLoad = 5; // 1回で読み込むステージ数
+
+        // ステージをロードする関数
+        function loadStages() {
+            const stageList = document.getElementById('stage-list');
+            const fragment = document.createDocumentFragment();
+
+            // 現在の表示数からperLoad分を表示
+            for (let i = displayedCount; i < displayedCount + perLoad && i < stages.length; i++) {
+                const stage = stages[i];
+                const stageElement = document.createElement('div');
+                stageElement.classList.add('stage-detail');
+
+                stageElement.innerHTML = `
+                    <div class="stage-image"></div>
+                    <div class="stage-info">
+                        <h3>${stage.title}</h3>
+                        <div class="stage-stats">
+                            <div>
+                                <span>💛 ${stage.likes}</span>
+                                <span>👣 ${stage.plays}</span>
+                            </div>
+                            <div>Best Time: ${stage.bestTime}</div>
+                            <div>Clear Rate: ${stage.clearRate}</div>
+                        </div>
+                    </div>
+                    <div class="creator-icon"></div>
+                `;
+
+                fragment.appendChild(stageElement);
+            }
+
+            stageList.appendChild(fragment);
+        }
+
+        // 「もっと見る」ボタンがクリックされたら新たなステージを読み込む
+        function loadMoreStages() {
+            displayedCount += perLoad;
+            loadStages();
+
+            // ステージを全て表示したら「もっと見る」ボタンを隠す
+            if (displayedCount >= stages.length) {
+                document.querySelector('.more-btn').style.display = 'none';
+            }
+        }
+
+        // ページ読み込み時に最初のステージをロード
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStages();
+        });
+    </script>
+
+</body>
+</html>
