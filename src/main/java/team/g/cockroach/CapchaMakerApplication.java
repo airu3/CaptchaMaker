@@ -1,4 +1,4 @@
-package cockroach.g.team;
+package team.g.cockroach;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
