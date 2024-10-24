@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヘルプトピックの閲覧</title>
+    <link rel="stylesheet" href="help.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .help-container {
+            width: 50%;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .header {
+            color: #4285f4;
+            padding: 15px;
+            text-align: center; /* フォントを中央に配置 */
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .accordion {
+            background-color: #4285f4;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            font-size: 18px;
+            outline: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .accordion:hover {
+            background-color: #3367d6;
+        }
+
+        .panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #e8f0fe;
+            border-radius: 5px;
+            padding-left: 15px;
+            margin-bottom: 10px;
+        }
+
+        .panel p {
+            padding: 10px;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="help-container">
+        <div class="header">お困りですか？</div>
+
+        <button class="accordion">アカウントとは</button>
+        <div class="panel">
+            <p>アカウントとは、ユーザーがサービスにアクセスするための識別情報です。</p>
+        </div>
+
+        <button class="accordion">新しいアカウントを作成する</button>
+        <div class="panel">
+            <p>新しいアカウントを作成するには、登録フォームに必要な情報を入力してください。</p>
+        </div>
+
+        <button class="accordion">アカウントの確認</button>
+        <div class="panel">
+            <p>アカウントの確認は、登録したメールアドレスに送信されたリンクをクリックして行います。</p>
+        </div>
+
+        <button class="accordion">第三者にパスワードを変更された</button>
+        <div class="panel">
+            <p>第三者にパスワードを変更された場合は、直ちにサポートに連絡してください。</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // ページの読み込みが完了したら実行される関数
+
+            // すべてのアコーディオン要素を取得
+            const accordions = document.querySelectorAll('.accordion');
+
+            // 各アコーディオン要素にクリックイベントリスナーを追加
+            accordions.forEach(accordion => {
+                accordion.addEventListener('click', function () {
+                    // クリックされたアコーディオン要素に 'active' クラスをトグル
+                    this.classList.toggle('active');
+
+                    // クリックされたアコーディオンの次の要素（パネル）を取得
+                    const panel = this.nextElementSibling;
+
+                    // パネルの表示状態をトグル
+                    if (panel.style.maxHeight) {
+                        // パネルが表示されている場合、非表示にする
+                        panel.style.maxHeight = null;
+                    } else {
+                        // パネルが非表示の場合、表示する
+                        panel.style.maxHeight = panel.scrollHeight + 'px';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
