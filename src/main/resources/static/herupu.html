@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヘルプページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f1f1f1;
+            padding: 15px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            text-align: center;
+        }
+        .content h1 {
+            font-size: 3em; /* 文字サイズを大きくする */
+        }
+        .sidebar button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+        }
+        .sidebar button:hover {
+            background-color: #0056b3;
+        }
+        .toggle-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-btn" onclick="toggleSidebar()">ヘルプを表示</button>
+    <div class="sidebar" id="sidebar">
+        <h2>ヘルプ</h2>
+        <button onclick="showMessage('セクション1の内容')">セクション1</button>
+        <button onclick="showMessage('セクション2の内容')">セクション2</button>
+        <button onclick="showMessage('セクション3の内容')">セクション3</button>
+        <button onclick="showMessage('セクション4の内容')">セクション4</button>
+    </div>
+    <div class="content">
+        <h1>ヘルプにようこそ</h1>
+    </div>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+
+        function showMessage(message) {
+            alert(message);
+        }
+    </script>
+</body>
+</html>
