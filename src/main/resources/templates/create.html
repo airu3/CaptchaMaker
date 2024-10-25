@@ -10,6 +10,10 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* サイドバーのスタイル */
@@ -20,6 +24,8 @@
             padding: 20px;
             color: #fff;
             position: fixed;
+            top: 0;
+            left: 0;
         }
 
         .menu-item {
@@ -41,13 +47,20 @@
 
         /* メインコンテンツ */
         .main-content {
-            margin-left: 270px;
+            width: 100%;
+            max-width: 600px;
             padding: 20px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
         }
 
         /* プレイ画面のスタイル */
         .game-container {
-            width: 300px;
+            width: 100%;
+            max-width: 300px;
             margin: 0 auto;
             text-align: center;
         }
@@ -55,11 +68,6 @@
         .game-title {
             font-size: 24px;
             margin-bottom: 10px;
-        }
-
-        .timer {
-            font-size: 18px;
-            margin-bottom: 20px;
         }
 
         .grid {
@@ -77,27 +85,6 @@
             cursor: pointer;
         }
 
-        .creator-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .creator-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #34495e;
-            cursor: pointer;
-        }
-
-        .creator-name {
-            margin-left: 10px;
-            font-size: 18px;
-        }
-
-        /* ボタンのスタイル */
         .action-buttons {
             display: flex;
             align-items: center;
@@ -119,22 +106,6 @@
             background-color: #2980b9;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #ecf0f1;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background-color: #2ecc71;
-            width: 0;
-            transition: width 1s linear;
-        }
-
         /* ポップアップのスタイル */
         .input-popup {
             display: none;
@@ -145,6 +116,23 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             font-size: 14px;
             border-radius: 5px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 10px;
+                width: 90%;
+            }
+
+            .grid-item {
+                width: 60px;
+                height: 60px;
+            }
+
+            .game-container {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -166,14 +154,6 @@
 
             <!-- タイトル入力 -->
             <input type="text" id="stage-title" placeholder="タイトルを入力してください" style="width: 100%; padding: 10px; margin-bottom: 10px;">
-
-            <!-- タイマーバー -->
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-
-            <!-- タイマー表示 -->
-            <div class="timer">60.0秒</div>
 
             <!-- グリッドのレイアウト -->
             <div class="grid">
@@ -228,7 +208,6 @@
 
         // グリッドアイテムを選択する機能
         function selectGridItem(item) {
-            // グリッドアイテムの選択状態を切り替える
             item.style.backgroundColor = item.style.backgroundColor === "yellow" ? "#bdc3c7" : "yellow";
         }
 
@@ -244,18 +223,6 @@
         document.getElementById("stage-title").addEventListener("blur", function() {
             document.getElementById("input-popup").style.display = "none";
         });
-
-        // プログレスバーのアニメーション（タイマー）
-        let progress = document.getElementById("progress-fill");
-        let width = 0;
-        let interval = setInterval(function() {
-            if (width >= 100) {
-                clearInterval(interval);
-            } else {
-                width++;
-                progress.style.width = width + "%";
-            }
-        }, 600); // 60秒間
     </script>
 </body>
 </html>
