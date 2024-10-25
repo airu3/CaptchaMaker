@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゲームタイトル画面</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .title-container {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .title-box {
+            font-size: 48px;
+            color: #2c3e50;
+            border: 3px solid #2c3e50;
+            padding: 20px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .title-box:hover {
+            background-color: #3498db;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-container" onclick="navigate()">
+        <div class="title-box">ゲームタイトル</div>
+        <div class="subtitle">クリックしてスタート</div>
+    </div>
+
+    <script>
+        // ログイン状態に応じてページ遷移
+        function navigate() {
+            const isLoggedIn = false; // ここでログイン状態を判定する（デモ用にfalse設定）
+            if (isLoggedIn) {
+                window.location.href = "stage.html";
+            } else {
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+</html>
+
+<!-- 
+デザインのコンセプト：
+
+シンプルかつモダンなデザインを目指しました。画面全体がクリック可能で、ユーザーにわかりやすく誘導しています。
+中央に大きなタイトルとサブタイトルがあり、マウスホバー時には少し拡大し、色が変わるシンプルなアニメーションを追加しました。
+色合いは、タイトル部分が ダークグレー(#2c3e50) で落ち着いた印象を与えつつ、ホバー時には ブルー(#3498db) に変わり、視覚的なアピールを高めています。
+レイアウト：
+
+画面中央にタイトルを配置しており、全画面サイズに対応しています。flexbox を使用して、画面中央に自動的にコンテンツが配置されるようにしました。
+動作：
+
+画面全体をクリック可能にして、クリックすると stage.html または login.html に遷移します。
+isLoggedIn 変数でログイン状態を判定しており、この変数は実際の環境ではサーバーサイドや認証機能と連携することで変更します。
+調整ポイント
+ログイン判定部分は、実際の実装では認証トークンやセッションなどを確認する処理に置き換えてください。 -->
