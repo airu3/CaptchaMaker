@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>reCAPTCHA風ゲーム</title>
+    <title>Stage Selection</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            display: flex;
         }
 
         /* サイドバーのスタイル */
@@ -20,6 +21,14 @@
             padding: 20px;
             color: #fff;
             position: fixed;
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #34495e;
+            margin-bottom: 20px;
         }
 
         .menu-item {
@@ -43,98 +52,99 @@
         .main-content {
             margin-left: 270px;
             padding: 20px;
+            flex-grow: 1;
         }
 
-        /* プレイ画面のスタイル */
-        .game-container {
-            width: 300px;
-            margin: 0 auto;
-            text-align: center;
+        /* ステージリストのスタイル */
+        .stage-list {
+            height: 500px;
+            overflow-y: auto;
+            padding-right: 20px;
+            scrollbar-width: thin;
         }
 
-        .game-title {
-            font-size: 24px;
-            margin-bottom: 10px;
+        .stage-detail {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            transition: box-shadow 0.3s;
         }
 
-        .timer {
-            font-size: 18px;
-            margin-bottom: 20px;
+        .stage-detail:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .grid-item {
+        .stage-image {
             width: 80px;
             height: 80px;
             background-color: #bdc3c7;
+            margin-right: 20px;
             border-radius: 5px;
-            cursor: pointer;
         }
 
-        .creator-info {
+        .stage-info {
+            flex-grow: 1;
+        }
+
+        .stage-info h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .stage-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .stage-stats div {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-top: 20px;
         }
 
-        .creator-pic {
+        .stage-stats span {
+            margin-right: 15px;
+        }
+
+        .creator-icon {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #34495e;
+            background-color: #bdc3c7;
             cursor: pointer;
         }
 
-        .creator-name {
-            margin-left: 10px;
-            font-size: 18px;
-        }
-
-        /* いいね・コメントボタンのスタイル */
-        .action-buttons {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .like-btn, .comment-btn {
-            font-size: 18px;
-            margin: 0 10px;
+        /* もっと見るボタン */
+        .more-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: #1abc9c;
+            text-align: center;
+            color: #fff;
+            width: 150px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: color 0.3s;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
 
-        .like-btn:hover {
-            color: #e74c3c;
+        .more-btn:hover {
+            background-color: #16a085;
         }
 
-        .comment-btn:hover {
-            color: #3498db;
+        /* スクロールバーのスタイル（カスタム） */
+        .stage-list::-webkit-scrollbar {
+            width: 8px;
         }
 
-        /* タイマーバーのスタイル */
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #ecf0f1;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background-color: #2ecc71;
-            width: 0;
-            transition: width 1s linear;
+        .stage-list::-webkit-scrollbar-thumb {
+            background-color: #1abc9c;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -142,8 +152,9 @@
 
     <!-- サイドバー -->
     <div class="sidebar">
+        <div class="profile-pic"></div>
         <a href="#" class="menu-item">あそぶ</a>
-        <a href="#" class="menu-item">つくる</a>
+        <a href="#" class="menu-item" onclick="window.location.href='create.html'">つくる</a>
         <a href="#" class="menu-item">自分のステージ</a>
         <a href="#" class="menu-item">人気のステージ</a>
         <a href="#" class="menu-item">新しいステージ</a>
@@ -151,56 +162,82 @@
 
     <!-- メインコンテンツ -->
     <div class="main-content">
-        <div class="game-container">
-            <div class="game-title">花田を探せ</div>
-
-            <!-- タイマーバー -->
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-
-            <!-- タイマー表示 -->
-            <div class="timer">60.0秒</div>
-
-            <!-- グリッドのレイアウト -->
-            <div class="grid">
-                <div class="grid-item"></div>
-                <div class="grid-item"></div>
-                <div class="grid-item"></div>
-                <div class="grid-item"></div>
-                <div class="grid-item"></div>
-                <div class="grid-item"></div>
-                <div class="grid-item"></div>
-                <div class="grid-item"></div>
-                <div class="grid-item"></div>
-            </div>
-
-            <!-- ステージ作成者情報 -->
-            <div class="creator-info">
-                <div class="creator-pic"></div>
-                <div class="creator-name">ハマチン</div>
-            </div>
-
-            <!-- いいね・コメントボタン -->
-            <div class="action-buttons">
-                <div class="like-btn">💗 312</div>
-                <div class="comment-btn">💬</div>
-            </div>
+        <div id="stage-list" class="stage-list">
+            <!-- JavaScriptでステージを動的に表示 -->
         </div>
+
+        <!-- もっと見るボタン -->
+        <div class="more-btn" onclick="loadMoreStages()">もっとみる</div>
     </div>
 
     <script>
-        // タイマーバーのアニメーション
-        let progress = document.getElementById("progress-fill");
-        let width = 0;
-        let interval = setInterval(function() {
-            if (width >= 100) {
-                clearInterval(interval);
-            } else {
-                width++;
-                progress.style.width = width + "%";
+        // ダミーデータ: ステージ詳細
+        const stages = [
+            { title: 'ステージ1', likes: 10, plays: 50, bestTime: '60s', clearRate: '80%', creator: 'user1' },
+            { title: 'ステージ2', likes: 5, plays: 30, bestTime: '45s', clearRate: '75%', creator: 'user2' },
+            { title: 'ステージ3', likes: 8, plays: 40, bestTime: '50s', clearRate: '70%', creator: 'user3' },
+            { title: 'ステージ4', likes: 12, plays: 60, bestTime: '55s', clearRate: '85%', creator: 'user4' },
+            { title: 'ステージ5', likes: 7, plays: 35, bestTime: '40s', clearRate: '90%', creator: 'user5' },
+            { title: 'ステージ6', likes: 15, plays: 70, bestTime: '35s', clearRate: '95%', creator: 'user6' },
+            { title: 'ステージ7', likes: 20, plays: 100, bestTime: '65s', clearRate: '50%', creator: 'user7' },
+            { title: 'ステージ8', likes: 25, plays: 120, bestTime: '75s', clearRate: '60%', creator: 'user8' },
+            { title: 'ステージ9', likes: 18, plays: 80, bestTime: '85s', clearRate: '65%', creator: 'user9' },
+            { title: 'ステージ10', likes: 30, plays: 150, bestTime: '95s', clearRate: '70%', creator: 'user10' }
+        ];
+
+        // 現在の表示数
+        let displayedCount = 0;
+        const perLoad = 5; // 1回で読み込むステージ数
+
+        // ステージをロードする関数
+        function loadStages() {
+            const stageList = document.getElementById('stage-list');
+            const fragment = document.createDocumentFragment();
+
+            // 現在の表示数からperLoad分を表示
+            for (let i = displayedCount; i < displayedCount + perLoad && i < stages.length; i++) {
+                const stage = stages[i];
+                const stageElement = document.createElement('div');
+                stageElement.classList.add('stage-detail');
+
+                stageElement.innerHTML = `
+                    <div class="stage-image"></div>
+                    <div class="stage-info">
+                        <h3>${stage.title}</h3>
+                        <div class="stage-stats">
+                            <div>
+                                <span>💛 ${stage.likes}</span>
+                                <span>👣 ${stage.plays}</span>
+                            </div>
+                            <div>Best Time: ${stage.bestTime}</div>
+                            <div>Clear Rate: ${stage.clearRate}</div>
+                        </div>
+                    </div>
+                    <div class="creator-icon"></div>
+                `;
+
+                fragment.appendChild(stageElement);
             }
-        }, 600); // タイマーは60秒間
+
+            stageList.appendChild(fragment);
+        }
+
+        // 「もっと見る」ボタンがクリックされたら新たなステージを読み込む
+        function loadMoreStages() {
+            displayedCount += perLoad;
+            loadStages();
+
+            // ステージを全て表示したら「もっと見る」ボタンを隠す
+            if (displayedCount >= stages.length) {
+                document.querySelector('.more-btn').style.display = 'none';
+            }
+        }
+
+        // ページ読み込み時に最初のステージをロード
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStages();
+        });
     </script>
+
 </body>
 </html>
