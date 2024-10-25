@@ -1,4 +1,4 @@
-package cockroach.g.team.service;
+package team.g.cockroach.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -6,8 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import cockroach.g.team.model.Stage;
-import cockroach.g.team.repository.StageRepository;
+import team.g.cockroach.model.Stage;
+import team.g.cockroach.repository.StageRepository;
 
 @Service
 public class StageService {
