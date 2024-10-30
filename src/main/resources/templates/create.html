@@ -10,18 +10,18 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
         }
 
         /* 外側のコンテナのスタイル */
         .outer-container {
-            border: 5px double #2c3e50; /* 二重枠 */
-            padding: 10px; /* 内側のコンテナとの間にスペースを追加 */
-            display: inline-block; /* コンテンツの幅に合わせる */
-            margin-left: 270px; /* サイドバーの幅に合わせてマージンを設定 */
+            border: 5px double #2c3e50;
+            padding: 10px;
+            display: inline-block;
+            margin-left: 270px;
         }
 
         /* サイドバーのスタイル */
@@ -32,16 +32,8 @@
             padding: 20px;
             color: #fff;
             position: fixed;
-            top: 0;
             left: 0;
-        }
-
-        .profile-pic {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #34495e;
-            margin-bottom: 20px;
+            top: 0;
         }
 
         .menu-item {
@@ -61,22 +53,20 @@
             background-color: #1abc9c;
         }
 
+        /* 特定のボタンを大きくする */
+        .menu-item.play, .menu-item.create {
+            font-size: 24px;
+            padding: 20px;
+        }
+
         /* メインコンテンツ */
         .main-content {
-            width: 100%;
-            max-width: 600px;
             padding: 20px;
-            background-color: #fff;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
         }
 
         /* プレイ画面のスタイル */
         .game-container {
-            width: 100%;
-            max-width: 300px;
+            width: 300px;
             margin: 0 auto;
             text-align: center;
         }
@@ -86,160 +76,124 @@
             margin-bottom: 10px;
         }
 
+        /* グリッドのレイアウト */
         .grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 1px;
+            justify-content: center;
             margin-bottom: 20px;
         }
 
         .grid-item {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background-color: #bdc3c7;
-            border-radius: 5px;
+            border-radius: 1px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .action-buttons {
+        .grid-item.selected {
+            background-color: #1abc9c;
+        }
+
+        /* ステージ作成者情報 */
+        .creator-info {
             display: flex;
             align-items: center;
-            justify-content: space-around;
+            justify-content: flex-start;
             margin-top: 20px;
         }
 
-        .input-btn {
-            font-size: 18px;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
+        .creator-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #34495e;
             cursor: pointer;
         }
 
-        .input-btn:hover {
-            background-color: #2980b9;
+        .creator-name {
+            margin-left: 5px;
+            font-size: 18px;
         }
 
-        /* ポップアップのスタイル */
-        .input-popup {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            font-size: 14px;
-            border-radius: 5px;
+        /* いいね・コメントボタン */
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            .main-content {
-                padding: 10px;
-                width: 90%;
-            }
+        .like-btn, .comment-btn {
+            font-size: 18px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
 
-            .grid-item {
-                width: 60px;
-                height: 60px;
-            }
+        .like-btn:hover {
+            color: #e74c3c;
+        }
 
-            .game-container {
-                max-width: 100%;
-            }
+        .comment-btn:hover {
+            color: #3498db;
         }
     </style>
 </head>
 <body>
-
-    <!-- サイドバー -->
     <div class="sidebar">
-        <div class="profile-pic"></div>
-        <a href="#" class="menu-item">あそぶ</a>
-        <a href="#" class="menu-item" onclick="window.location.href='create.html'">つくる</a>
+        <a href="#" class="menu-item play">あそぶ</a>
+        <a href="#" class="menu-item create">つくる</a>
         <a href="#" class="menu-item">自分のステージ</a>
         <a href="#" class="menu-item">人気のステージ</a>
         <a href="#" class="menu-item">新しいステージ</a>
     </div>
 
-    <!-- メインコンテンツ -->
-    <div class="main-content">
-        <div class="game-container">
-            <div class="game-title">ステージを作成</div>
+    <div class="outer-container">
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <div class="game-container">
+                <div class="game-title">ステージを作成</div>
 
-            <!-- タイトル入力 -->
-            <input type="text" id="stage-title" placeholder="タイトルを入力してください" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                <!-- タイトル入力 -->
+                <input type="text" id="stage-title" placeholder="タイトルを入力してください" style="width: 100%; padding: 10px; margin-bottom: 10px;">
 
-            <!-- グリッドのレイアウト -->
-            <div class="grid">
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
+                <!-- グリッドのレイアウト -->
+                <div class="grid">
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    <div class="grid-item" onclick="selectGridItem(this)"></div>
+                </div>
+
+                <!-- 画像を入れる、正解枠決定ボタン -->
+                <div class="action-buttons">
+                    <button class="like-btn" onclick="insertImage()">画像を入れる</button>
+                    <button class="comment-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
+                </div>
+
+                <!-- 保存ボタン -->
+                <div class="action-buttons">
+                    <button class="like-btn" onclick="saveStage()">保存</button>
+                </div>
             </div>
-
-            <!-- 画像を入れる、正解枠決定ボタン -->
-            <div class="action-buttons">
-                <button class="input-btn" onclick="insertImage()">画像を入れる</button>
-                <button class="input-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
-            </div>
-
-            <!-- 保存ボタン -->
-            <div class="action-buttons">
-                <button class="input-btn" onclick="saveStage()">保存</button>
-            </div>
-
-            <!-- ポップアップ -->
-            <div id="input-popup" class="input-popup"></div>
-
         </div>
-    </div>
 
-    <script>
-        // 画像を入れる機能
-        function insertImage() {
-            alert("画像を挿入します");
-        }
-
-        // 正解枠を決める機能
-        function setCorrectGrid() {
-            alert("正解の枠を設定します");
-        }
-
-        // ステージ保存機能
-        function saveStage() {
-            const title = document.getElementById("stage-title").value;
-            if (!title) {
-                alert("タイトルを入力してください");
-            } else {
-                alert("ステージが保存されました");
+        <script>
+            // グリッドアイテムの選択
+            function selectGridItem(item) {
+                item.classList.toggle('selected');
             }
-        }
-
-        // グリッドアイテムを選択する機能
-        function selectGridItem(item) {
-            item.style.backgroundColor = item.style.backgroundColor === "yellow" ? "#bdc3c7" : "yellow";
-        }
-
-        // ポップアップ機能
-        document.getElementById("stage-title").addEventListener("focus", function() {
-            const popup = document.getElementById("input-popup");
-            popup.innerText = "タイトルを入力してください";
-            popup.style.display = "block";
-            popup.style.top = (this.offsetTop + this.offsetHeight) + "px";
-            popup.style.left = this.offsetLeft + "px";
-        });
-
-        document.getElementById("stage-title").addEventListener("blur", function() {
-            document.getElementById("input-popup").style.display = "none";
-        });
-    </script>
+        </script>
+    </div>
 </body>
 </html>
