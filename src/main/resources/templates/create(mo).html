@@ -10,8 +10,11 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-
 
         /* サイドバーのスタイル */
         .sidebar {
@@ -21,6 +24,8 @@
             padding: 20px;
             color: #fff;
             position: fixed;
+            left: 0;
+            top: 0;
         }
 
         .menu-item {
@@ -40,10 +45,23 @@
             background-color: #1abc9c;
         }
 
+        /* 特定のボタンを大きくする */
+        .menu-item.play, .menu-item.create {
+            font-size: 24px;
+            padding: 20px;
+        }
+
         /* メインコンテンツ */
         .main-content {
-            margin-left: 270px;
             padding: 20px;
+        }
+
+        /* 内側のコンテナのスタイル */
+        .inner-container {
+            border: 5px double #34495e; /* 二重枠 */
+            padding: 10px; /* 内側のコンテナとの間にスペースを追加 */
+            display: inline-block; /* コンテンツの幅に合わせる */
+            margin-left: 270px; /* サイドバーの幅に合わせてマージンを設定 */
         }
 
         /* プレイ画面のスタイル */
@@ -83,11 +101,10 @@
             transition: background-color 0.3s;
         }
 
-
         .creator-info {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start; /* アイコンと名前を左揃えにする */
             margin-top: 20px;
         }
 
@@ -100,7 +117,7 @@
         }
 
         .creator-name {
-            margin-left: 10px;
+            margin-left: 5px; /* アイコンと名前の間の距離を近づける */
             font-size: 18px;
         }
 
@@ -120,27 +137,11 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            width: 150px; /* ボタンの幅を固定 */
         }
 
         .input-btn:hover {
             background-color: #2980b9;
-        }
-
-        /* タイマーバーのスタイル */
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #ecf0f1;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background-color: #2ecc71;
-            width: 100%;
-            transition: width 1s linear;
         }
 
         /* ポップアップのスタイル */
@@ -154,62 +155,67 @@
             font-size: 14px;
             border-radius: 5px;
         }
+
+        /* ボタン間の隙間を追加 */
+        .action-buttons .input-btn + .input-btn {
+            margin-left: 10px; /* 1cm = 10px */
+        }
     </style>
 </head>
 <body>
+    <div class="outer-container">
+        <!-- サイドバー -->
+        <div class="sidebar">
+            <a href="#" class="menu-item play">あそぶ</a>
+            <a href="#" class="menu-item create">つくる</a>
+            <a href="#" class="menu-item">自分のステージ</a>
+            <a href="#" class="menu-item">人気のステージ</a>
+            <a href="#" class="menu-item">新しいステージ</a>
+        </div>
 
-    <!-- サイドバー -->
-    <div class="sidebar">
-        <a href="#" class="menu-item">あそぶ</a>
-        <a href="#" class="menu-item">つくる</a>
-        <a href="#" class="menu-item">自分のステージ</a>
-        <a href="#" class="menu-item">人気のステージ</a>
-        <a href="#" class="menu-item">新しいステージ</a>
-    </div>
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <div class="inner-container" id="inner-container">
+                <div class="game-container">
+                    <div class="game-title">ステージを作成</div>
 
-    <!-- メインコンテンツ -->
-    <div class="main-content">
-        <div class="game-container">
-            <div class="game-title">ステージを作成</div>
+                    <!-- タイトル入力 -->
+                    <input type="text" id="stage-title" placeholder="タイトルを入力してください" style="width: 100%; padding: 10px; margin-bottom: 10px;">
 
-            <!-- タイトル入力 -->
-            <input type="text" id="stage-title" placeholder="タイトルを入力してください" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                    <!-- タイマー設定 -->
+                    <input type="number" id="timer-input" placeholder="タイマーを設定してください（秒）" style="width: 100%; padding: 10px; margin-bottom: 10px;">
 
-            <!-- タイマーバー -->
-            <div class="progress-bar" id="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
+                    <!-- タイマー表示 -->
+                    <div class="timer" id="timer">60.0秒</div>
+
+                    <!-- グリッドのレイアウト -->
+                    <div class="grid">
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    </div>
+
+                    <!-- 画像を入れる、正解枠決定ボタン -->
+                    <div class="action-buttons">
+                        <button class="input-btn" onclick="insertImage()">画像を入れる</button>
+                        <button class="input-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
+                    </div>
+
+                    <!-- 保存ボタン -->
+                    <div class="action-buttons">
+                        <button class="input-btn" onclick="saveStage()">保存</button>
+                    </div>
+
+                    <!-- ポップアップ -->
+                    <div id="input-popup" class="input-popup"></div>
+                </div>
             </div>
-
-            <!-- タイマー表示 -->
-            <div class="timer" id="timer">60.0秒</div>
-
-            <!-- グリッドのレイアウト -->
-            <div class="grid">
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-                <div class="grid-item" onclick="selectGridItem(this)"></div>
-            </div>
-
-            <!-- 画像を入れる、正解枠決定ボタン -->
-            <div class="action-buttons">
-                <button class="input-btn" onclick="insertImage()">画像を入れる</button>
-                <button class="input-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
-            </div>
-
-            <!-- 保存ボタン -->
-            <div class="action-buttons">
-                <button class="input-btn" onclick="saveStage()">保存</button>
-            </div>
-
-            <!-- ポップアップ -->
-            <div id="input-popup" class="input-popup"></div>
-
         </div>
     </div>
 
@@ -253,18 +259,19 @@
             document.getElementById("input-popup").style.display = "none";
         });
 
-        // プログレスバーのアニメーション（タイマー）
-        let progress = document.getElementById("progress-fill");
-        let width = 100;
-        let interval = setInterval(function() {
-            if (width <= 0) {
-                clearInterval(interval);
-            } else {
-                width--;
-                progress.style.width = width + "%";
-                document.getElementById("timer").innerText = (width * 0.6).toFixed(1) + "秒";
-            }
-        }, 600); // 60秒間
+        // タイマー設定機能
+        document.getElementById("timer-input").addEventListener("change", function() {
+            const timerValue = this.value;
+            document.getElementById("timer").innerText = timerValue + "秒";
+        });
+
+        // 内側のコンテナの幅をタイトル入力より1cm大きく設定
+        window.onload = function() {
+            let stageTitle = document.getElementById("stage-title");
+            let innerContainer = document.getElementById("inner-container");
+            let stageTitleWidth = stageTitle.offsetWidth;
+            innerContainer.style.width = (stageTitleWidth + 100) + "px"; // 1cm = 100px
+        };
     </script>
 </body>
 </html>
