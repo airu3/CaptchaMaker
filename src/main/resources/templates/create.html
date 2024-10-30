@@ -11,29 +11,22 @@
             padding: 0;
             background-color: #f4f4f4;
             display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
-        }
-
-        /* 外側のコンテナのスタイル */
-        .outer-container {
-            border: 5px double #2c3e50;
-            padding: 10px;
-            display: inline-block;
-            margin-left: 270px;
         }
 
         /* サイドバーのスタイル */
         .sidebar {
             width: 250px;
-            height: 100vh;
             background-color: #2c3e50;
             padding: 20px;
             color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             position: fixed;
             left: 0;
             top: 0;
+            bottom: 0;
         }
 
         .menu-item {
@@ -47,27 +40,41 @@
             color: #fff;
             border-radius: 5px;
             transition: background-color 0.3s;
+            width: 100%;
         }
 
         .menu-item:hover {
             background-color: #1abc9c;
         }
 
-        /* 特定のボタンを大きくする */
         .menu-item.play, .menu-item.create {
             font-size: 24px;
-            padding: 20px;
+            padding: 15px;
         }
 
         /* メインコンテンツ */
         .main-content {
+            margin-left: 270px; /* サイドバーの幅を考慮 */
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: calc(100% - 270px); /* サイドバー分の幅を引く */
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 内側のコンテナのスタイル */
+        .inner-container {
+            border: 5px double #34495e;
+            padding: 20px;
+            background-color: #fff;
+            width: 400px; /* 固定幅に変更 */
+            box-sizing: border-box;
         }
 
         /* プレイ画面のスタイル */
         .game-container {
-            width: 300px;
-            margin: 0 auto;
             text-align: center;
         }
 
@@ -76,12 +83,16 @@
             margin-bottom: 10px;
         }
 
-        /* グリッドのレイアウト */
+        .timer {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(3, 100px);
             grid-template-rows: repeat(3, 100px);
-            gap: 1px;
+            gap: 5px;
             justify-content: center;
             margin-bottom: 20px;
         }
@@ -90,61 +101,35 @@
             width: 100px;
             height: 100px;
             background-color: #bdc3c7;
-            border-radius: 1px;
             cursor: pointer;
+            background-size: cover;
+            background-position: center;
             transition: background-color 0.3s;
         }
 
-        .grid-item.selected {
-            background-color: #1abc9c;
-        }
-
-        /* ステージ作成者情報 */
-        .creator-info {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            margin-top: 20px;
-        }
-
-        .creator-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #34495e;
-            cursor: pointer;
-        }
-
-        .creator-name {
-            margin-left: 5px;
-            font-size: 18px;
-        }
-
-        /* いいね・コメントボタン */
         .action-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            justify-content: space-around;
             margin-top: 20px;
         }
 
-        .like-btn, .comment-btn {
+        .input-btn {
             font-size: 18px;
-            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: color 0.3s;
         }
 
-        .like-btn:hover {
-            color: #e74c3c;
-        }
-
-        .comment-btn:hover {
-            color: #3498db;
+        .input-btn:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
 <body>
+    <!-- サイドバー -->
     <div class="sidebar">
         <a href="#" class="menu-item play">あそぶ</a>
         <a href="#" class="menu-item create">つくる</a>
@@ -153,14 +138,20 @@
         <a href="#" class="menu-item">新しいステージ</a>
     </div>
 
-    <div class="outer-container">
-        <!-- メインコンテンツ -->
-        <div class="main-content">
+    <!-- メインコンテンツ -->
+    <div class="main-content">
+        <div class="inner-container">
             <div class="game-container">
                 <div class="game-title">ステージを作成</div>
 
                 <!-- タイトル入力 -->
                 <input type="text" id="stage-title" placeholder="タイトルを入力してください" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+
+                <!-- タイマー設定 -->
+                <input type="number" id="timer-input" placeholder="タイマーを設定してください（秒）" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+
+                <!-- タイマー表示 -->
+                <div class="timer" id="timer">60.0秒</div>
 
                 <!-- グリッドのレイアウト -->
                 <div class="grid">
@@ -177,23 +168,49 @@
 
                 <!-- 画像を入れる、正解枠決定ボタン -->
                 <div class="action-buttons">
-                    <button class="like-btn" onclick="insertImage()">画像を入れる</button>
-                    <button class="comment-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
+                    <button class="input-btn" onclick="insertImage()">画像を入れる</button>
+                    <button class="input-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
                 </div>
 
                 <!-- 保存ボタン -->
                 <div class="action-buttons">
-                    <button class="like-btn" onclick="saveStage()">保存</button>
+                    <button class="input-btn" onclick="saveStage()">保存</button>
                 </div>
             </div>
         </div>
-
-        <script>
-            // グリッドアイテムの選択
-            function selectGridItem(item) {
-                item.classList.toggle('selected');
-            }
-        </script>
     </div>
+
+    <script>
+        // 画像を入れる機能
+        function insertImage() {
+            alert("画像を挿入します");
+        }
+
+        // 正解枠を決める機能
+        function setCorrectGrid() {
+            alert("正解の枠を設定します");
+        }
+
+        // ステージ保存機能
+        function saveStage() {
+            const title = document.getElementById("stage-title").value;
+            if (!title) {
+                alert("タイトルを入力してください");
+            } else {
+                alert("ステージが保存されました");
+            }
+        }
+
+        // グリッドアイテムを選択する機能
+        function selectGridItem(item) {
+            item.style.backgroundColor = item.style.backgroundColor === "yellow" ? "#bdc3c7" : "yellow";
+        }
+
+        // タイマー設定機能
+        document.getElementById("timer-input").addEventListener("change", function() {
+            const timerValue = this.value;
+            document.getElementById("timer").innerText = timerValue + "秒";
+        });
+    </script>
 </body>
 </html>
