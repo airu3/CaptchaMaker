@@ -28,6 +28,14 @@
             left: 0;
         }
 
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #34495e;
+            margin-bottom: 20px;
+        }
+
         .menu-item {
             display: block;
             margin: 20px 0;
@@ -140,8 +148,9 @@
 
     <!-- サイドバー -->
     <div class="sidebar">
+        <div class="profile-pic"></div>
         <a href="#" class="menu-item">あそぶ</a>
-        <a href="#" class="menu-item">つくる</a>
+        <a href="#" class="menu-item" onclick="window.location.href='create.html'">つくる</a>
         <a href="#" class="menu-item">自分のステージ</a>
         <a href="#" class="menu-item">人気のステージ</a>
         <a href="#" class="menu-item">新しいステージ</a>
