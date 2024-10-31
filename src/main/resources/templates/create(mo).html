@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ステージ作成画面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* サイドバーのスタイル */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            padding: 20px;
+            color: #fff;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .menu-item {
+            display: block;
+            margin: 20px 0;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #34495e;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #1abc9c;
+        }
+
+        /* 特定のボタンを大きくする */
+        .menu-item.play, .menu-item.create {
+            font-size: 24px;
+            padding: 20px;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            padding: 20px;
+        }
+
+        /* 内側のコンテナのスタイル */
+        .inner-container {
+            border: 5px double #34495e; /* 二重枠 */
+            padding: 10px; /* 内側のコンテナとの間にスペースを追加 */
+            display: inline-block; /* コンテンツの幅に合わせる */
+            margin-left: 270px; /* サイドバーの幅に合わせてマージンを設定 */
+        }
+
+        /* プレイ画面のスタイル */
+        .game-container {
+            width: 300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 100px); /* 各列100px */
+            grid-template-rows: repeat(3, 100px); /* 各行100px */
+            gap: 1px; /* グリッド間の間隔を1px */
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+ 
+        .grid-item {
+            width: 100px; /* 横幅を1cm拡大する */
+            height: 100px; /* 高さを1cm拡大する */
+            background-color: #bdc3c7;
+            border-radius: 1px;
+            cursor: pointer;
+            background-size: cover; /* 画像をアイテムのサイズに合わせる */
+            background-position: center; /* 画像を中央に配置する */
+            transition: background-color 0.3s;
+        }
+
+        .grid-item.selected {
+            background-color: rgba(255, 0, 0, 0.5); /* 薄い赤色 */
+        }
+
+        .grid-item.selected-before {
+            background-color: yellow; /* 黄色 */
+        }
+
+        .grid-item.correct {
+            border: 3px solid green; /* 正解枠を緑色の枠で囲む */
+        }
+
+        .creator-info {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* アイコンと名前を左揃えにする */
+            margin-top: 20px;
+        }
+
+        .creator-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #34495e;
+            cursor: pointer;
+        }
+
+        .creator-name {
+            margin-left: 5px; /* アイコンと名前の間の距離を近づける */
+            font-size: 18px;
+        }
+
+        /* ボタンのスタイル */
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .input-btn {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 150px; /* ボタンの幅を固定 */
+        }
+
+        .input-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* ポップアップのスタイル */
+        .input-popup {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        /* ボタン間の隙間を追加 */
+        .action-buttons .input-btn + .input-btn {
+            margin-left: 10px; /* 1cm = 10px */
+        }
+    </style>
+</head>
+<body>
+    <div class="outer-container">
+        <!-- サイドバー -->
+        <div class="sidebar">
+            <a href="#" class="menu-item play">あそぶ</a>
+            <a href="#" class="menu-item create">つくる</a>
+            <a href="#" class="menu-item">自分のステージ</a>
+            <a href="#" class="menu-item">人気のステージ</a>
+            <a href="#" class="menu-item">新しいステージ</a>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <div class="inner-container" id="inner-container">
+                <div class="game-container">
+                    <div class="game-title">ステージを作成</div>
+
+                    <!-- タイトル入力 -->
+                    <input type="text" id="stage-title" placeholder="タイトルを入力してください" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+
+                    <!-- タイマー設定 -->
+                    <input type="number" id="timer-input" placeholder="タイマーを設定してください（秒）" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+
+                    <!-- タイマー表示 -->
+                    <div class="timer" id="timer">60.0秒</div>
+
+                    <!-- グリッドのレイアウト -->
+                    <div class="grid">
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                        <div class="grid-item" onclick="selectGridItem(this)"></div>
+                    </div>
+
+                    <!-- 画像を入れる、正解枠決定ボタン -->
+                    <div class="action-buttons">
+                        <button class="input-btn" onclick="document.getElementById('image-input').click()">画像を入れる</button>
+                        <button class="input-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
+                    </div>
+
+                    <!-- 画像入力 -->
+                    <input type="file" id="image-input" style="display: none;" accept="image/*" onchange="insertImage(event)">
+
+                    <!-- 保存ボタン -->
+                    <div class="action-buttons">
+                        <button class="input-btn" onclick="saveStage()">保存</button>
+                    </div>
+
+                    <!-- ポップアップ -->
+                    <div id="input-popup" class="input-popup"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedGridItem = null;
+        let correctGridItems = [];
+
+        // 画像を入れる機能
+        function insertImage(event) {
+            if (!selectedGridItem) {
+                alert("まず、画像を挿入するグリッドアイテムを選択してください。");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function() {
+                selectedGridItem.style.backgroundImage = `url(${reader.result})`;
+                selectedGridItem.classList.remove("selected-before");
+                selectedGridItem.classList.add("selected");
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // 正解枠を決める機能
+        function setCorrectGrid() {
+            if (!selectedGridItem) {
+                alert("まず、正解の枠を設定するグリッドアイテムを選択してください。");
+                return;
+            }
+            if (!correctGridItems.includes(selectedGridItem)) {
+                correctGridItems.push(selectedGridItem);
+                selectedGridItem.classList.add("correct");
+            }
+        }
+
+        // ステージ保存機能
+        function saveStage() {
+            const title = document.getElementById("stage-title").value;
+            if (!title) {
+                alert("タイトルを入力してください");
+            } else {
+                alert("ステージが保存されました");
+            }
+        }
+
+        // グリッドアイテムを選択する機能
+        function selectGridItem(item) {
+            if (selectedGridItem) {
+                selectedGridItem.classList.remove("selected");
+                selectedGridItem.classList.remove("selected-before");
+            }
+            selectedGridItem = item;
+            if (item.style.backgroundImage) {
+                item.classList.add("selected");
+            } else {
+                item.classList.add("selected-before");
+            }
+        }
+
+        // ポップアップ機能
+        document.getElementById("stage-title").addEventListener("focus", function() {
+            const popup = document.getElementById("input-popup");
+            popup.innerText = "タイトルを入力してください";
+            popup.style.display = "block";
+            popup.style.top = (this.offsetTop + this.offsetHeight) + "px";
+            popup.style.left = this.offsetLeft + "px";
+        });
+
+        document.getElementById("stage-title").addEventListener("blur", function() {
+            document.getElementById("input-popup").style.display = "none";
+        });
+
+        // タイマー設定機能
+        document.getElementById("timer-input").addEventListener("change", function() {
+            const timerValue = this.value;
+            document.getElementById("timer").innerText = timerValue + "秒";
+        });
+
+        // 内側のコンテナの幅をタイトル入力より1cm大きく設定
+        window.onload = function() {
+            let stageTitle = document.getElementById("stage-title");
+            let innerContainer = document.getElementById("inner-container");
+            let stageTitleWidth = stageTitle.offsetWidth;
+            innerContainer.style.width = (stageTitleWidth + 100) + "px"; // 1cm = 100px
+        };
+    </script>
+</body>
+</html>
