@@ -203,9 +203,12 @@
 
                     <!-- 画像を入れる、正解枠決定ボタン -->
                     <div class="action-buttons">
-                        <button class="input-btn" onclick="insertImage()">画像を入れる</button>
+                        <button class="input-btn" onclick="document.getElementById('image-input').click()">画像を入れる</button>
                         <button class="input-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
                     </div>
+
+                    <!-- 画像入力 -->
+                    <input type="file" id="image-input" style="display: none;" accept="image/*" onchange="insertImage(event)">
 
                     <!-- 保存ボタン -->
                     <div class="action-buttons">
@@ -220,9 +223,19 @@
     </div>
 
     <script>
+        let selectedGridItem = null;
+
         // 画像を入れる機能
-        function insertImage() {
-            alert("画像を挿入します");
+        function insertImage(event) {
+            if (!selectedGridItem) {
+                alert("まず、画像を挿入するグリッドアイテムを選択してください。");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function() {
+                selectedGridItem.style.backgroundImage = `url(${reader.result})`;
+            };
+            reader.readAsDataURL(event.target.files[0]);
         }
 
         // 正解枠を決める機能
@@ -242,8 +255,11 @@
 
         // グリッドアイテムを選択する機能
         function selectGridItem(item) {
-            // グリッドアイテムの選択状態を切り替える
-            item.style.backgroundColor = item.style.backgroundColor === "yellow" ? "#bdc3c7" : "yellow";
+            if (selectedGridItem) {
+                selectedGridItem.style.backgroundColor = "#bdc3c7";
+            }
+            selectedGridItem = item;
+            item.style.backgroundColor = "yellow";
         }
 
         // ポップアップ機能
