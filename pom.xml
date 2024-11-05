@@ -10,10 +10,10 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>team.g.cockroach</groupId>
-	<artifactId>CapchaMaker</artifactId>
+	<artifactId>CaptchaMaker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>CapchaMaker</name>
+	<name>CaptchaMaker</name>
 	<description>あなたたちはロボットでした。</description>
 	<url/>
 	<licenses>
