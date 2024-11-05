@@ -1,5 +1,5 @@
 package team.g.cockroach.service;
 
-public class GameService {
+public class GameStageService {
 	
 }
