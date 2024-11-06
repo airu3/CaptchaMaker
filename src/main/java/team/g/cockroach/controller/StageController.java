@@ -8,14 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import team.g.cockroach.model.Stage;
-import team.g.cockroach.service.StageService;
+import team.g.cockroach.entity.GameStage;
+import team.g.cockroach.service.GameStageService;
 
 @Controller
 public class StageController {
 
 	@Autowired
-	private StageService stageService;
+	private GameStageService gameStageService;
 
 	@GetMapping("/stages")
 	public String listStages(
@@ -24,19 +24,19 @@ public class StageController {
 			@RequestParam(defaultValue = "all") String filter,
 			Model model) {
 
-		Page<Stage> stages;
+		Page<GameStage> stages;
 		switch (filter) {
 			case "my":
-				stages = stageService.findMyStages(PageRequest.of(page, size));
+				stages = gameStageService.findMyStages(PageRequest.of(page, size));
 				break;
 			case "popular":
-				stages = stageService.findPopularStages(PageRequest.of(page, size));
+				stages = gameStageService.findPopularStages(PageRequest.of(page, size));
 				break;
 			case "new":
-				stages = stageService.findNewStages(PageRequest.of(page, size));
+				stages = gameStageService.findNewStages(PageRequest.of(page, size));
 				break;
 			default:
-				stages = stageService.findAllStages(PageRequest.of(page, size));
+				stages = gameStageService.findAllStages(PageRequest.of(page, size));
 				break;
 		}
 
