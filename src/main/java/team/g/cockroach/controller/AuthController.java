@@ -7,7 +7,7 @@ import team.g.cockroach.service.AuthService;
 import team.g.cockroach.dto.AuthRequestDTO;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired

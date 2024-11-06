@@ -28,11 +28,6 @@ public class MainController {
 		return "title";
 	}
 
-	@GetMapping("/stage/find")
-	public String findStage() {
-		return "stage/find";
-	}
-
 	@GetMapping("/stage/{stageId}")
 	public String playStage(@PathVariable String stageId, Model model) {
 		model.addAttribute("stageId", stageId);
