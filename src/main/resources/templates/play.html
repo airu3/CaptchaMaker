@@ -5,25 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>reCAPTCHA風ゲーム</title>
     <style>
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
             display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
         }
- 
-        /* 外側のコンテナのスタイル */
-        .outer-container {
-            border: 5px double #2c3e50; /* 二重枠 */
-            padding: 10px; /* 内側のコンテナとの間にスペースを追加 */
-            display: inline-block; /* コンテンツの幅に合わせる */
-            margin-left: 270px; /* サイドバーの幅に合わせてマージンを設定 */
-        }
- 
+
         /* サイドバーのスタイル */
         .sidebar {
             width: 250px;
@@ -35,7 +26,7 @@
             left: 0;
             top: 0;
         }
- 
+
         .menu-item {
             display: block;
             margin: 20px 0;
@@ -48,70 +39,118 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
- 
+
         .menu-item:hover {
             background-color: #1abc9c;
         }
- 
-        /* 特定のボタンを大きくする */
+
         .menu-item.play, .menu-item.create {
             font-size: 24px;
             padding: 20px;
         }
- 
+
         /* メインコンテンツ */
         .main-content {
+            margin-left: 270px;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: calc(100% - 270px);
+            height: 100vh;
+            box-sizing: border-box;
         }
- 
-        /* プレイ画面のスタイル */
-        .game-container {
-            width: 300px;
-            margin: 0 auto;
+
+        /* 内側のコンテナ */
+        .outer-container {
+            border: 5px solid #fff;
+            padding: 5px;
+            background-color: #fff;
+            width: 450px;
+            box-sizing: border-box;
             text-align: center;
+            position: relative;
         }
- 
+
+        /* 各外枠のスタイル */
+        .section-wrapper {
+            border: 2px solid #2980b9;
+            padding: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* タイトル・タイマー・タイマーバー */
         .game-title {
             font-size: 24px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            text-decoration: underline;
+            text-underline-offset: 5px;
         }
- 
+
+        .game-subtitle {
+            font-size: 16px;
+            color: #7f8c8d;
+            position: absolute;
+            top: 40px;
+            left: 20px;
+        }
+
         .timer {
             font-size: 18px;
+            margin-bottom: 5px;
+            top: 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
             margin-bottom: 20px;
         }
- 
+
+        .progress-fill {
+            height: 100%;
+            background-color: #2ecc71;
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        /* グリッドのサイズ調整 */
         .grid {
             display: grid;
-            grid-template-columns: repeat(3, 100px); /* 各列100px */
-            grid-template-rows: repeat(3, 100px); /* 各行100px */
-            gap: 1px; /* グリッド間の間隔を1px */
+            grid-template-columns: repeat(3, 120px);
+            grid-template-rows: repeat(3, 120px);
+            gap: 5px;
             justify-content: center;
             margin-bottom: 20px;
         }
- 
+
         .grid-item {
-            width: 100px; /* 横幅を1cm拡大する */
-            height: 100px; /* 高さを1cm拡大する */
+            width: 120px;
+            height: 120px;
             background-color: #bdc3c7;
-            border-radius: 1px;
             cursor: pointer;
-            background-size: cover; /* 画像をアイテムのサイズに合わせる */
-            background-position: center; /* 画像を中央に配置する */
+            background-size: cover;
+            background-position: center;
             transition: background-color 0.3s;
         }
- 
+
         .grid-item.selected {
-            background-color: #1abc9c; /* 選択されたアイテムの背景色を変更 */
+            background-color: #1abc9c;
         }
- 
+
+        /* ステージ作成者情報と確認ボタン */
         .creator-info {
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* アイコンと名前を左揃えにする */
+            justify-content: flex-start;
             margin-top: 20px;
         }
- 
+
         .creator-pic {
             width: 40px;
             height: 40px;
@@ -119,130 +158,194 @@
             background-color: #34495e;
             cursor: pointer;
         }
- 
+
         .creator-name {
-            margin-left: 5px; /* アイコンと名前の間の距離を近づける */
+            margin-left: 10px;
             font-size: 18px;
+            text-decoration: underline;
+            text-underline-offset: 5px;
         }
- 
-        /* いいね・コメントボタンのスタイル */
+
+        .confirm-btn {
+            margin-left: auto;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .confirm-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* いいね・コメントボタン */
         .action-buttons {
+            position: absolute;
+            top: 50%;
+            right: -120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateY(-50%);
+            gap: 20px;
+        }
+
+        .like-checkbox, .comment-btn {
+            font-size: 24px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 20px;
-        }
- 
-        .like-btn, .comment-btn {
-            font-size: 18px;
-            margin: 0 10px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: color 0.3s;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s;
         }
- 
-        .like-btn:hover {
+
+        .like-checkbox {
+            background-color: #fff;
             color: #e74c3c;
+            border: 2px solid #e74c3c;
         }
- 
+
+        .like-checkbox.checked {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        .comment-btn {
+            background-color: #3498db;
+        }
+
         .comment-btn:hover {
-            color: #3498db;
+            background-color: #2980b9;
         }
- 
-        /* タイマーバーのスタイル */
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #ecf0f1;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
+
+        /* ポップアップのスタイル */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border: 2px solid #34495e;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            text-align: center;
         }
- 
-        .progress-fill {
-            height: 100%;
-            background-color: #2ecc71;
-            width: 100%;
-            transition: width 1s linear;
+
+        .popup-close {
+            margin-top: 15px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .popup-close:hover {
+            background-color: #c0392b;
         }
     </style>
+
 </head>
 <body>
+    <!-- サイドバー -->
     <div class="sidebar">
-        <a href="#" class="menu-item play">あそぶ</a>
-        <a href="#" class="menu-item create">つくる</a>
-        <a href="#" class="menu-item">自分のステージ</a>
-        <a href="#" class="menu-item">人気のステージ</a>
-        <a href="#" class="menu-item">新しいステージ</a>
+        <a href="#" class="menu-item play" onclick="navigate('play')">あそぶ</a>
+        <a href="#" class="menu-item create" onclick="navigate('create')">つくる</a>
+        <a href="#" class="menu-item" onclick="navigate('my-stages')">自分のステージ</a>
+        <a href="#" class="menu-item" onclick="navigate('popular-stages')">人気のステージ</a>
+        <a href="#" class="menu-item" onclick="navigate('new-stages')">新しいステージ</a>
     </div>
- 
-    <div class="outer-container" id="outer-container">
-        <!-- メインコンテンツ -->
-        <div class="main-content">
-            <div class="game-container">
-                <div class="game-title">花田を探せ</div>
- 
-                <!-- タイマーバー -->
-                <div class="progress-bar" id="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
- 
-                <!-- タイマー表示 -->
-                <div class="timer" id="timer">60.0秒</div>
- 
-                <!-- グリッドのレイアウト -->
-                <div class="grid">
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                    <div class="grid-item" onclick="toggleSelection(this)"></div>
-                </div>
- 
-                <!-- ステージ作成者情報 -->
-                <div class="creator-info">
-                    <div class="creator-pic"></div>
-                    <div class="creator-name">ハマチン</div>
-                </div>
- 
-                <!-- いいね・コメントボタン -->
-                <div class="action-buttons">
-                    <div class="like-btn">💗 312</div>
-                    <div class="comment-btn">💬</div>
-                </div>
-            </div>
-        </div>
- 
-        <script>
-            // タイマーバーのアニメーション
+
+    <!-- メインコンテンツ -->
+    <div class="main-content" id="main-content">
+        <!-- JavaScriptでコンテンツを動的に挿入します -->
+    </div>
+
+    <script>
+        
+    // 初期ロード時に「遊ぶ」ページを表示
+    window.onload = () => navigate('play');
+
+    // ナビゲーション関数
+    async function navigate(page) {
+        const contentContainer = document.getElementById("main-content");
+        contentContainer.innerHTML = ""; // 以前のコンテンツをクリア
+
+        if (page === 'play') {
+            contentContainer.innerHTML = generatePlayPage();
+            startTimer();
+        } else if (page === 'create') {
+            await loadPageContent('create.html');
+        } else if (page === 'my-stages') {
+            await loadPageContent('stage.html');
+        } else if (page === 'popular-stages') {
+            contentContainer.innerHTML = "<h2>人気のステージ</h2><p>ここに人気のステージ一覧を表示します。</p>";
+        } else if (page === 'new-stages') {
+            contentContainer.innerHTML = "<h2>新しいステージ</h2><p>ここに最新のステージ一覧を表示します。</p>";
+        }
+    }
+
+    // 外部HTMLページを読み込んで挿入する関数
+    async function loadPageContent(pageUrl) {
+        try {
+            const response = await fetch(pageUrl);
+            if (!response.ok) throw new Error("Failed to load page content.");
+            const content = await response.text();
+            document.getElementById("main-content").innerHTML = content;
+        } catch (error) {
+            console.error("Error loading page:", error);
+            document.getElementById("main-content").innerHTML = "<p>コンテンツを読み込めませんでした。</p>";
+        }
+    }
+
+
+        // タイマーバーのアニメーション
+        function startTimer() {
             let progress = document.getElementById("progress-fill");
             let width = 100;
-            let interval = setInterval(function() {
+            clearInterval(window.timerInterval);
+            window.timerInterval = setInterval(function() {
                 if (width <= 0) {
-                    clearInterval(interval);
+                    clearInterval(window.timerInterval);
                 } else {
                     width--;
                     progress.style.width = width + "%";
                     document.getElementById("timer").innerText = (width * 0.6).toFixed(1) + "秒";
                 }
-            }, 600); // タイマーは60秒間
- 
-            // 外側のコンテナの幅をタイマーバーより1cm大きく設定
-            window.onload = function() {
-                let progressBar = document.getElementById("progress-bar");
-                let outerContainer = document.getElementById("outer-container");
-                let progressBarWidth = progressBar.offsetWidth;
-                outerContainer.style.width = (progressBarWidth + 100) + "px"; // 1cm = 100px
-            };
- 
-            // グリッドアイテムの選択状態を切り替える関数
-            function toggleSelection(element) {
-                element.classList.toggle('selected');
+            }, 600);
+        }
+
+        // グリッドアイテムの選択状態を切り替える関数
+        function toggleSelection(element) {
+            element.classList.toggle('selected');
+        }
+
+        // ポップアップの表示と非表示
+        function togglePopup() {
+            const popup = document.getElementById("popup");
+            if (popup) {
+                popup.style.display = popup.style.display === "none" ? "block" : "none";
             }
-        </script>
-    </div>
+        }
+
+        // いいねボタンの色を切り替える関数
+        function toggleLike(element) {
+            element.classList.toggle('checked');
+        }
+    </script>
 </body>
 </html>
