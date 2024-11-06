@@ -7,7 +7,7 @@ import team.g.cockroach.service.UserService;
 import team.g.cockroach.dto.UserDTO;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
