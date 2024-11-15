@@ -98,7 +98,21 @@
             cursor: pointer;
             background-size: cover; /* 画像をアイテムのサイズに合わせる */
             background-position: center; /* 画像を中央に配置する */
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, border 0.3s;
+        }
+
+        .grid-item.selected {
+            border: 3px solid rgba(255, 0, 0, 0.5); /* 薄い赤色の枠で囲む */
+            box-sizing: border-box; /* 枠を含めたサイズを元のサイズに保つ */
+        }
+
+        .grid-item.selected-before {
+            background-color: yellow; /* 黄色 */
+        }
+
+        .grid-item.correct {
+            border: 3px solid green; /* 正解枠を緑色の枠で囲む */
+            box-sizing: border-box; /* 枠を含めたサイズを元のサイズに保つ */
         }
 
         .creator-info {
@@ -160,15 +174,100 @@
         .action-buttons .input-btn + .input-btn {
             margin-left: 10px; /* 1cm = 10px */
         }
+
+        /* 警告ポップアップのスタイル */
+        .warning-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffcccc;
+            border: 2px solid #ff0000;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        /* 確認ポップアップのスタイル */
+        .confirm-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ccffcc;
+            border: 2px solid #00cc00;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .confirm-popup button {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .confirm-popup button:hover {
+            background-color: #2980b9;
+        }
+
+        /* 保存成功ポップアップのスタイル */
+        .success-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            border: 2px solid #00cc00;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 1000;
+        }
+        
+        /* グリッドアイテム選択警告ポップアップのスタイル */
+        .select-warning-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            border: 2px solid #ff0000;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        
     </style>
 </head>
 <body>
     <div class="outer-container">
         <!-- サイドバー -->
         <div class="sidebar">
-            <a href="#" class="menu-item play">あそぶ</a>
-            <a href="#" class="menu-item create">つくる</a>
-            <a href="#" class="menu-item">自分のステージ</a>
+            <a href="play.html" class="menu-item play">あそぶ</a>
+            <a href="create(mo).html" class="menu-item create">つくる</a>
+            <a href="stage.html" class="menu-item">自分のステージ</a>
             <a href="#" class="menu-item">人気のステージ</a>
             <a href="#" class="menu-item">新しいステージ</a>
         </div>
@@ -203,61 +302,152 @@
 
                     <!-- 画像を入れる、正解枠決定ボタン -->
                     <div class="action-buttons">
-                        <button class="input-btn" onclick="insertImage()">画像を入れる</button>
+                        <button class="input-btn" onclick="checkGridItemSelected()">画像を入れる</button>
                         <button class="input-btn" onclick="setCorrectGrid()">正解の枠を決める</button>
                     </div>
 
+                    <!-- 画像入力 -->
+                    <input type="file" id="image-input" style="display: none;" accept="image/*" onchange="insertImage(event)">
+
                     <!-- 保存ボタン -->
                     <div class="action-buttons">
-                        <button class="input-btn" onclick="saveStage()">保存</button>
+                        <button class="input-btn" onclick="checkSaveConditions()">保存</button>
                     </div>
 
                     <!-- ポップアップ -->
                     <div id="input-popup" class="input-popup"></div>
+
+                    <!-- 警告ポップアップ -->
+                    <div id="warning-popup" class="warning-popup">タイトル、タイマー、すべてのグリッドアイテムに画像を入れてください。</div>
+
+                    <!-- 確認ポップアップ -->
+                    <div id="confirm-popup" class="confirm-popup">
+                        本当に保存しますか？
+                        <button onclick="confirmSave()">保存します</button>
+                    
+                    <!-- 保存成功ポップアップ -->
+                    <div id="success-popup" class="success-popup">保存成功</div>
+                    
+                    <!-- グリッドアイテム選択警告ポップアップ -->
+                    <div id="select-warning-popup" class="select-warning-popup">グリッドアイテムを選択してください</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        let selectedGridItem = null;
+        let correctGridItems = [];
+
         // 画像を入れる機能
-        function insertImage() {
-            alert("画像を挿入します");
+        function insertImage(event) {
+            if (!selectedGridItem) {
+                document.getElementById("select-warning-popup").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("select-warning-popup").style.display = "none";
+                }, 3000);
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function() {
+                selectedGridItem.style.backgroundImage = `url(${reader.result})`;
+                selectedGridItem.classList.remove("selected-before");
+                selectedGridItem.classList.add("selected");
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // グリッドアイテムが選択されているかチェックする機能
+        function checkGridItemSelected() {
+            if (!selectedGridItem) {
+                document.getElementById("select-warning-popup").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("select-warning-popup").style.display = "none";
+                }, 3000);
+                return;
+            }
+            document.getElementById('image-input').click();
         }
 
         // 正解枠を決める機能
         function setCorrectGrid() {
-            alert("正解の枠を設定します");
+            if (!selectedGridItem) {
+                alert("まず、正解の枠を設定するグリッドアイテムを選択してください。");
+                return;
+            }
+            if (!correctGridItems.includes(selectedGridItem)) {
+                correctGridItems.push(selectedGridItem);
+                selectedGridItem.classList.add("correct");
+            }
+        }
+
+        // 保存条件をチェックする機能
+        function checkSaveConditions() {
+            const title = document.getElementById("stage-title").value;
+            const timer = document.getElementById("timer-input").value;
+            const gridItems = document.querySelectorAll(".grid-item");
+
+            let allImagesSet = true;
+            gridItems.forEach((item) => {
+                if (!item.style.backgroundImage) {
+                    allImagesSet = false;
+                }
+            });
+
+            if (!title || !timer || !allImagesSet) {
+                document.getElementById("warning-popup").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("warning-popup").style.display = "none";
+                }, 3000);
+                return;
+            }
+
+            document.getElementById("confirm-popup").style.display = "block";
         }
 
         // ステージ保存機能
-        function saveStage() {
+        function confirmSave() {
             const title = document.getElementById("stage-title").value;
-            if (!title) {
-                alert("タイトルを入力してください");
-            } else {
-                alert("ステージが保存されました");
-            }
+            const timer = document.getElementById("timer-input").value;
+            const gridItems = document.querySelectorAll(".grid-item");
+            const stageData = {
+                title: title,
+                timer: timer,
+                grid: []
+            };
+
+            gridItems.forEach((item, index) => {
+                const gridItemData = {
+                    index: index,
+                    backgroundImage: item.style.backgroundImage,
+                    isCorrect: item.classList.contains("correct")
+                };
+                stageData.grid.push(gridItemData);
+            });
+
+            localStorage.setItem("savedStage", JSON.stringify(stageData));
+            document.getElementById("confirm-popup").style.display = "none";
+            document.getElementById("success-popup").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("success-popup").style.display = "none";
+                window.location.href = "stage.html";
+            }, 2000);
         }
 
         // グリッドアイテムを選択する機能
         function selectGridItem(item) {
-            // グリッドアイテムの選択状態を切り替える
-            item.style.backgroundColor = item.style.backgroundColor === "yellow" ? "#bdc3c7" : "yellow";
+            if (selectedGridItem) {
+                selectedGridItem.classList.remove("selected");
+                selectedGridItem.classList.remove("selected-before");
+            }
+            selectedGridItem = item;
+            if (item.style.backgroundImage) {
+                item.classList.add("selected");
+            } else {
+                item.classList.add("selected-before");
+            }
         }
 
-        // ポップアップ機能
-        document.getElementById("stage-title").addEventListener("focus", function() {
-            const popup = document.getElementById("input-popup");
-            popup.innerText = "タイトルを入力してください";
-            popup.style.display = "block";
-            popup.style.top = (this.offsetTop + this.offsetHeight) + "px";
-            popup.style.left = this.offsetLeft + "px";
-        });
-
-        document.getElementById("stage-title").addEventListener("blur", function() {
-            document.getElementById("input-popup").style.display = "none";
-        });
 
         // タイマー設定機能
         document.getElementById("timer-input").addEventListener("change", function() {
