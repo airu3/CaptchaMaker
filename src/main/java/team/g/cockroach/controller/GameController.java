@@ -3,7 +3,7 @@ package team.g.cockroach.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import team.g.cockroach.service.GameStageService;
+import team.g.cockroach.service.StageService;
 import team.g.cockroach.dto.GameDTO;
 
 @RestController
@@ -11,7 +11,7 @@ import team.g.cockroach.dto.GameDTO;
 public class GameController {
 
     @Autowired
-    private GameStageService gameStageService;
+    private StageService gameStageService;
 
     /**
      * 指定されたIDのゲームを取得します。
