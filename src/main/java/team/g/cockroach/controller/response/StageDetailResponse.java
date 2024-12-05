@@ -1,5 +1,9 @@
 package team.g.cockroach.controller.response;
 
+import lombok.Data;
+import java.util.List;
+import team.g.cockroach.controller.response.UserInfo;
+
 @Data
 public class StageDetailResponse {
 	private String id;
